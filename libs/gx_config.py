@@ -18,7 +18,6 @@ class GXConfig:
         self.header = ""
         self.transform = None
         self.inverse_transform = None
-        self.header_layers = []
 
         try:
             self.pick_file()
@@ -27,9 +26,7 @@ class GXConfig:
             exit(1)
 
         self.parse_file()
-        self.construct_transform()
-        self.construct_inverse_transform()
-        #self.find_header_layers
+        self.construct_transforms()
 
     def pick_file(self):
         dialog = forms.OpenFileDialog()
@@ -57,7 +54,7 @@ class GXConfig:
         self.schema = config.get("Export", "Schema")
         self.header = config.get("Export", "Header")
 
-    def construct_transform(self):
+    def construct_transforms(self):
         translation = (self.x, self.y, self.z)
         world_plane = rs.WorldXYPlane()
         rotate = rs.RotatePlane(world_plane, self.r, [0,0,1])
@@ -65,9 +62,7 @@ class GXConfig:
         target_plane = rs.PlaneTransform(rotate,move)
         
         self.transform = rs.XformChangeBasis(target_plane,world_plane)
-
-    def construct_inverse_transform(self):
-        self.inverse_transform = rs.XformInverse(self.transform)
+        self.inverse_transform = rs.XformChangeBasis(world_plane,target_plane)
 
     def get_header_layers(self):
         all_file_layers = []

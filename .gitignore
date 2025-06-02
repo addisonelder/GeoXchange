@@ -1,0 +1,4 @@
+**/__pycache__/
+**testing/export/
+libs/gx_ui.py
+libs/gx_gui.py

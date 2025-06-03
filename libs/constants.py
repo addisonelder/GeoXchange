@@ -1,0 +1,1 @@
+YAK_SERVER = "//omapi-fs01/PA-WV Bridge Storage/Yak/GeoXchange_Configs"

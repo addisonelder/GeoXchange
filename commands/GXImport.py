@@ -1,27 +1,10 @@
 #! python3
 import os
 import Rhino
-import scriptcontext # type: ignore
 import System # type: ignore
-import Eto.Forms as forms # type: ignore
-import Rhino.UI as ui
 from libs import gx_export_logic as gel
 from libs import gx_config
-
-def pick_dwg_file():
-    dialog = forms.OpenFileDialog()
-    dialog.Filters.Add(forms.FileFilter("DWG Files (*.dwg)", [".dwg"]))
-    dialog.Filters.Add(forms.FileFilter("All Files (*.*)", ["*"]))
-    dialog.FilterIndex = 0  # explicitly select first filter
-
-    if dialog.ShowDialog(ui.RhinoEtoApp.MainWindow) == forms.DialogResult.Ok:
-        selected_files = dialog.Filenames
-        # Process the selected files
-        for file_path in selected_files:
-            print(f"Opening DWG File: {file_path}")
-        return selected_files
-    else:
-        raise Exception("ERROR: Invalid file, or no file was selected")
+from libs import filepicker
 
 def main():
     print("**~~~~~~~~~~~~~~~~~~~**")
@@ -35,7 +18,7 @@ def main():
     existing_layer_ids = set(layer.Id for layer in doc.Layers)
 
     # Pick and load dwg files from dialog
-    dwg_filepaths = pick_dwg_file()
+    dwg_filepaths = filepicker.pick_file(".dwg", "DWG Files")
 
     # Pick and load config file
     config = gx_config.GXConfig()
